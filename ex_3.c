@@ -5,12 +5,14 @@ int runProgram();
 int firstAction();
 int secondAction();
 int thirdAction();
+int fourthAction();
 void fillArray(int array[], int currentIdx, int size);
 void printArray(int array[], int arrayLength);
 void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2);
 int paliDistance(char str[], int start, int end);
 int checkBalance(char* str, int n);
 int checkBalanceHelper(char str[], int length, int idx);
+int escapingTime(int n);
 
 int main() {
 	runProgram();
@@ -47,6 +49,10 @@ int runProgram() {
 	}
 	if (action == 3) {
 		thirdAction();
+		return 0 + runProgram();
+	}
+	if (action == 4) {
+		fourthAction();
 		return 0 + runProgram();
 	}
 	else if (action == 6) return 1;
@@ -102,6 +108,15 @@ int thirdAction() {
 
 	return 0;
 }
+int fourthAction() {
+	int currentRoom;
+
+	printf("What room are you in boss?\n");
+	scanf("%d", &currentRoom);
+	printf("Your escaping time is: %d\n", escapingTime(currentRoom));
+
+	return 0;
+}
 void fillArray(int array[], int currentIdx, int size) {
 	if (currentIdx >= size) return;
 	scanf("%d", &array[currentIdx]);
@@ -148,4 +163,21 @@ int checkBalanceHelper(char str[], int length, int idx) {
 	if (idx >= length) return 0;
 	// if its a, increase by 1, if its b, decrease by 1. If the armies are balanced--we should end up with 0
 	return (str[idx] == 'a' ? 1 : -1) + checkBalanceHelper(str, length, idx + 1);
+}
+int escapingTime(int n) {
+	if (n == 1) return 0;
+	int canDiv2 = !(n % 2);
+	int canDiv3 = !(n % 3);
+	
+	int leastSteps = 1 + escapingTime(n - 1);
+	if (canDiv2) {
+		int div2Steps = 1 + escapingTime(n / 2);
+		if (div2Steps < leastSteps) leastSteps = div2Steps;
+	}
+	if (canDiv3) {
+		int div3Steps = 1 + escapingTime(n / 3);
+		if (div3Steps < leastSteps) leastSteps = div3Steps;
+	}
+
+	return leastSteps;
 }
