@@ -5,7 +5,6 @@ int runProgram();
 int firstAction();
 void fillArray(int array[], int currentIdx, int size);
 void printArray(int array[], int arrayLength);
-void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2);
 int main() {
 	runProgram();
 	return 0;
@@ -36,7 +35,7 @@ int runProgram() {
 		firstAction();
 		return 0 + runProgram();
 	}
-	else if (action == 6) return 1;
+	if (action == 6) return 1;
 	else return 0;
 }
 
@@ -54,16 +53,9 @@ int firstAction() {
 	printf("Now enter the second array's elements:\n");
 	fillArray(secondArray, 0, secondArrayLength);
 
-	printf("start ");
-	mergePrint(
-		firstArray,
-		secondArray,
-		0,
-		0,
-		firstArrayLength - 1,
-		secondArrayLength - 1
-	);
-	printf("end\n");
+	printArray(firstArray, firstArrayLength);
+	printArray(secondArray, secondArrayLength);
+
 	return 0;
 }
 void fillArray(int array[], int currentIdx, int size) {
@@ -78,18 +70,4 @@ void printArray(int array[], int arrayLength) {
 		if (i < arrayLength - 1) printf(",");
 	}
 	printf("]\n");
-}
-void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2) {
-	int isValidIndex1 = start1 <= end1;
-	int isValidIndex2 = start2 <= end2;
-	if (!isValidIndex1 && !isValidIndex2) return;
-
-	if (!isValidIndex1 && isValidIndex2) printf("%d ", a2[start2]);
-	else if (isValidIndex1 && !isValidIndex2) printf("%d ", a1[start1]);
-	else {
-		int smallerNum = a1[start1] < a2[start2] ? a1[start1] : a2[start2];
-		int biggerNum = a1[start1] > a2[start2] ? a1[start1] : a2[start2];
-		printf("%d %d ", smallerNum, biggerNum);
-	}
-	mergePrint(a1, a2, start1 + 1, start2 + 1, end1, end2);
 }
