@@ -20,7 +20,6 @@ int getAction() {
 	printf("4. find optimal time for escaping\n");
 	printf("5. check workers efficiency\n");
 	printf("6. exit\n");
-	printf("\n");
 	scanf("%d", &action);
 	if (action < 1 || action > 6) {
 		printf("Sorry Tony, I don't understand...\n");
