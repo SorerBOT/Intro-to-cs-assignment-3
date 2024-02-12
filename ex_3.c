@@ -4,10 +4,13 @@ int getAction();
 int runProgram();
 int firstAction();
 int secondAction();
+int thirdAction();
 void fillArray(int array[], int currentIdx, int size);
 void printArray(int array[], int arrayLength);
 void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2);
 int paliDistance(char str[], int start, int end);
+int checkBalance(char* str, int n);
+int checkBalanceHelper(char str[], int length, int idx);
 
 int main() {
 	runProgram();
@@ -40,6 +43,10 @@ int runProgram() {
 	}
 	if (action == 2) {
 		secondAction();
+		return 0 + runProgram();
+	}
+	if (action == 3) {
+		thirdAction();
 		return 0 + runProgram();
 	}
 	else if (action == 6) return 1;
@@ -83,6 +90,18 @@ int secondAction() {
 	printf("The palindrome distance is %d.\n", paliDistance(string, 0, stringLength - 1));
 	return 0;
 }
+int thirdAction() {
+	int gCount; // the amount of gangsters
+	char string[31]; // 30 chars + \0
+	
+	printf("Enter the number of gang members:\n");
+	scanf("%d", &gCount);
+	printf("Enter the gang associations:\n");
+	scanf("%30s", string);
+	checkBalance(string, gCount);
+
+	return 0;
+}
 void fillArray(int array[], int currentIdx, int size) {
 	if (currentIdx >= size) return;
 	scanf("%d", &array[currentIdx]);
@@ -115,4 +134,18 @@ void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2) 
 int paliDistance(char str[], int start, int end) {
 	if (end <= start) return 0;
 	return (str[start] != str[end]) + paliDistance(str, start + 1, end - 1);
+}
+int checkBalance(char* str, int n) {
+	printf(
+		!checkBalanceHelper(str, n, 0)
+			? "The army is balanced.\n"
+			: "The army is not balanced.\n"
+	);
+
+	return 0;
+}
+int checkBalanceHelper(char str[], int length, int idx) {
+	if (idx >= length) return 0;
+	// if its a, increase by 1, if its b, decrease by 1. If the armies are balanced--we should end up with 0
+	return (str[idx] == 'a' ? 1 : -1) + checkBalanceHelper(str, length, idx + 1);
 }
