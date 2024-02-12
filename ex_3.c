@@ -3,9 +3,12 @@
 int getAction();
 int runProgram();
 int firstAction();
+int secondAction();
 void fillArray(int array[], int currentIdx, int size);
 void printArray(int array[], int arrayLength);
 void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2);
+int paliDistance(char str[], int start, int end);
+
 int main() {
 	runProgram();
 	return 0;
@@ -33,6 +36,10 @@ int runProgram() {
 	
 	if (action == 1) {
 		firstAction();
+		return 0 + runProgram();
+	}
+	if (action == 2) {
+		secondAction();
 		return 0 + runProgram();
 	}
 	else if (action == 6) return 1;
@@ -65,6 +72,17 @@ int firstAction() {
 	printf("end\n");
 	return 0;
 }
+int secondAction() {
+	int stringLength;
+	char string[31]; // 30 chars + \0
+	
+	printf("Enter the length of the string:\n");
+	scanf("%d", &stringLength);
+	printf("Now enter the string:\n");
+	scanf("%30s", string);
+	printf("The palindrome distance is %d.\n", paliDistance(string, 0, stringLength - 1));
+	return 0;
+}
 void fillArray(int array[], int currentIdx, int size) {
 	if (currentIdx >= size) return;
 	scanf("%d", &array[currentIdx]);
@@ -82,13 +100,19 @@ void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2) 
 	int isValidIndex1 = start1 <= end1;
 	int isValidIndex2 = start2 <= end2;
 	if (!isValidIndex1 && !isValidIndex2) return;
-
-	if (!isValidIndex1 && isValidIndex2) printf("%d ", a2[start2]);
-	else if (isValidIndex1 && !isValidIndex2) printf("%d ", a1[start1]);
-	else {
-		int smallerNum = a1[start1] < a2[start2] ? a1[start1] : a2[start2];
-		int biggerNum = a1[start1] > a2[start2] ? a1[start1] : a2[start2];
-		printf("%d %d ", smallerNum, biggerNum);
+	if (!isValidIndex1 && isValidIndex2) {
+		printf("%d ", a2[start2]);
+		return mergePrint(a1, a2, start1, start2 + 1, end1, end2);
 	}
-	mergePrint(a1, a2, start1 + 1, start2 + 1, end1, end2);
+	if (isValidIndex1 && !isValidIndex2) {
+		printf("%d ", a1[start1]);
+		return mergePrint(a1, a2, start1 + 1, start2, end1, end2);
+	}
+	int is1Smaller = a1[start1] < a2[start2];
+	printf("%d ", is1Smaller ? a1[start1] : a2[start2]);
+	mergePrint(a1, a2, start1 + is1Smaller, start2 + !is1Smaller, end1, end2);
+}
+int paliDistance(char str[], int start, int end) {
+	if (end <= start) return 0;
+	return (str[start] != str[end]) + paliDistance(str, start + 1, end - 1);
 }
