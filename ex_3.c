@@ -6,13 +6,17 @@ int firstAction();
 int secondAction();
 int thirdAction();
 int fourthAction();
+int fifthAction();
+int sixthAction();
 void fillArray(int array[], int currentIdx, int size);
+void fillTwoArrays(int array1[], int array2[], int currentIdx, int size);
 void printArray(int array[], int arrayLength);
 void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2);
 int paliDistance(char str[], int start, int end);
 int checkBalance(char* str, int n);
 int checkBalanceHelper(char str[], int length, int idx);
 int escapingTime(int n);
+int heistOpt(int maxW, int optVal, int w[], int v[], int start, int len);
 
 int main() {
 	runProgram();
@@ -41,21 +45,28 @@ int runProgram() {
 	
 	if (action == 1) {
 		firstAction();
-		return 0 + runProgram();
+		return runProgram();
 	}
 	if (action == 2) {
 		secondAction();
-		return 0 + runProgram();
+		return runProgram();
 	}
 	if (action == 3) {
 		thirdAction();
-		return 0 + runProgram();
+		return runProgram();
 	}
 	if (action == 4) {
 		fourthAction();
-		return 0 + runProgram();
+		return runProgram();
 	}
-	else if (action == 6) return 1;
+	if (action == 5) {
+		fifthAction();
+		return runProgram();
+	}
+	if (action == 6) {
+		sixthAction();
+		return 1;
+	}
 	else return 0;
 }
 
@@ -117,10 +128,33 @@ int fourthAction() {
 
 	return 0;
 }
+int fifthAction() {
+	int numOfObjects, maxWeight;
+	int values[30], weights[30];
+
+	printf("Enter the number of objects and the maximum weight:\n");
+	scanf("%d", &numOfObjects);
+	scanf("%d", &maxWeight);
+	printf("Now enter the objects' values and weights:\n");
+
+	fillTwoArrays(values, weights, 0, numOfObjects);
+	printf("The optimal heist income value is %d\n", heistOpt(maxWeight, 0, weights, values, 0, numOfObjects));
+	return 0;
+}
+int sixthAction() {
+	printf("goodbye boss!\n");
+	return 0;
+}
 void fillArray(int array[], int currentIdx, int size) {
 	if (currentIdx >= size) return;
 	scanf("%d", &array[currentIdx]);
 	fillArray(array, currentIdx+1, size);
+}
+void fillTwoArrays(int array1[], int array2[], int currentIdx, int size) {
+	if (currentIdx >= size) return;
+	scanf("%d", &array1[currentIdx]);
+	scanf("%d", &array2[currentIdx]);
+	fillTwoArrays(array1, array2, currentIdx+1, size);
 }
 void printArray(int array[], int arrayLength) {
 	printf("[");
@@ -180,4 +214,14 @@ int escapingTime(int n) {
 	}
 
 	return leastSteps;
+}
+int heistOpt(int maxW, int optVal, int w[], int v[], int start, int len) {
+	int withCurrent, withoutCurrent;
+	if (start >= len) return optVal;
+	if (maxW < w[start]) return heistOpt(maxW, optVal, w, v, start + 1, len);
+	
+	withCurrent = heistOpt(maxW - w[start], optVal + v[start], w, v, start + 1, len);
+	withoutCurrent = heistOpt(maxW, optVal, w, v, start + 1, len);
+
+	return (withCurrent > withoutCurrent) ? withCurrent : withoutCurrent;
 }
