@@ -1,4 +1,12 @@
+/**************************
+ *
+ * ID: 216872374
+ * Name: Alon Filler
+ *
+ *************************/
 #include <stdio.h>
+#define ARRAY_SIZE 30
+#define CHAR_ARRAY_SIZE 31
 
 int getAction();
 int runProgram();
@@ -10,7 +18,7 @@ int fifthAction();
 int sixthAction();
 void fillArray(int array[], int currentIdx, int size);
 void fillTwoArrays(int array1[], int array2[], int currentIdx, int size);
-void printArray(int array[], int arrayLength);
+void fillCharArray(char array[], int currentIdx, int size);
 void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2);
 int paliDistance(char str[], int start, int end);
 int checkBalance(char* str, int n);
@@ -22,7 +30,8 @@ int main() {
 	runProgram();
 	return 0;
 }
-
+// user input: {integer} prompts the user for an action number 
+// output:		 {integer} returns the number that the user entered
 int getAction() {
 	int action;
 	printf("What is your desired task boss?\n");
@@ -39,7 +48,10 @@ int getAction() {
 	}
 	return action;
 }
-
+// purpose: controls the flow of the application.
+// repeatedly does the following:
+// * gets an action number
+// * calls the function associated with that action number
 int runProgram() {
 	int action = getAction();
 	
@@ -69,10 +81,17 @@ int runProgram() {
 	}
 	else return 0;
 }
-
+// user input:
+// * {integer} firstArrayLength
+// * {integer} secondArrayLength
+// 
+// performs the following actions:
+// * uses the fillArray() function to fill firstArray
+// * uses the fillArray() function to fill secondArray
+// * calls the mergePrint() using firstArray and secondArray
 int firstAction() {
 	int firstArrayLength, secondArrayLength;
-	int firstArray[30], secondArray[30];
+	int firstArray[ARRAY_SIZE], secondArray[ARRAY_SIZE];
 
 	printf("Enter the length of the first worker array:\n");
 	scanf("%d", &firstArrayLength);
@@ -96,29 +115,48 @@ int firstAction() {
 	printf("end\n");
 	return 0;
 }
+// user input:
+// * {integer} stringLength
+// * {char[]}  string
+//
+// performs the following actions:
+// * prints the result of using paliDistance() on the string
 int secondAction() {
 	int stringLength;
-	char string[31]; // 30 chars + \0
+	char string[CHAR_ARRAY_SIZE]; // 30 chars + \0 = 31
 	
 	printf("Enter the length of the string:\n");
 	scanf("%d", &stringLength);
 	printf("Now enter the string:\n");
-	scanf("%30s", string);
+	fillCharArray(string, 0, stringLength);
+	string[stringLength] = '\0';
 	printf("The palindrome distance is %d.\n", paliDistance(string, 0, stringLength - 1));
 	return 0;
 }
+// user input:
+// * {integer} gCount
+// * {char[]} string
+//
+// performs the following actions:
+// calls checkBalance using string and gCount 
 int thirdAction() {
 	int gCount; // the amount of gangsters
-	char string[31]; // 30 chars + \0
+	char string[CHAR_ARRAY_SIZE]; // 30 chars + \0
 	
 	printf("Enter the number of gang members:\n");
 	scanf("%d", &gCount);
 	printf("Enter the gang associations:\n");
-	scanf("%30s", string);
+	fillCharArray(string, 0, gCount);
+	string[gCount] = '\0';
 	checkBalance(string, gCount);
 
 	return 0;
 }
+// user input:
+// * {integer} currentRoom
+//
+// performs the following actions:
+// * prints the minimal escaping time using the escapingTime() function on currentRoom
 int fourthAction() {
 	int currentRoom;
 
@@ -128,9 +166,16 @@ int fourthAction() {
 
 	return 0;
 }
+// user input:
+// * {integer} numOfObjects
+// * {integer} maxWeight
+//
+// performs the following actions:
+// * fills the arrays values and weights using the fillTwoArrays() function
+// * prints the result of using the heistOpt() on the arrays
 int fifthAction() {
 	int numOfObjects, maxWeight;
-	int values[30], weights[30];
+	int values[ARRAY_SIZE], weights[ARRAY_SIZE];
 
 	printf("Enter the number of objects and the maximum weight:\n");
 	scanf("%d", &numOfObjects);
@@ -141,29 +186,30 @@ int fifthAction() {
 	printf("The optimal heist income value is %d\n", heistOpt(maxWeight, 0, weights, values, 0, numOfObjects));
 	return 0;
 }
+// exits the program
 int sixthAction() {
 	printf("goodbye boss!\n");
 	return 0;
 }
+// recursively fills an array
 void fillArray(int array[], int currentIdx, int size) {
 	if (currentIdx >= size) return;
 	scanf("%d", &array[currentIdx]);
 	fillArray(array, currentIdx+1, size);
 }
+// recursively fills two arrays
 void fillTwoArrays(int array1[], int array2[], int currentIdx, int size) {
 	if (currentIdx >= size) return;
 	scanf("%d", &array1[currentIdx]);
 	scanf("%d", &array2[currentIdx]);
 	fillTwoArrays(array1, array2, currentIdx+1, size);
 }
-void printArray(int array[], int arrayLength) {
-	printf("[");
-	for (int i = 0; i < arrayLength; i++) {
-		printf("%d", array[i]);
-		if (i < arrayLength - 1) printf(",");
-	}
-	printf("]\n");
+void fillCharArray(char array[], int currentIdx, int size) {
+	if (currentIdx >= size) return;
+	scanf(" %c", &array[currentIdx]);
+	fillCharArray(array, currentIdx+1, size);
 }
+// my implementation of mergePrint
 void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2) {
 	int isValidIndex1 = start1 <= end1;
 	int isValidIndex2 = start2 <= end2;
@@ -180,10 +226,13 @@ void mergePrint(int a1[], int a2[], int start1, int start2, int end1, int end2) 
 	printf("%d ", is1Smaller ? a1[start1] : a2[start2]);
 	mergePrint(a1, a2, start1 + is1Smaller, start2 + !is1Smaller, end1, end2);
 }
+// my implementation of paliDistance
 int paliDistance(char str[], int start, int end) {
 	if (end <= start) return 0;
 	return (str[start] != str[end]) + paliDistance(str, start + 1, end - 1);
 }
+// my implementation of checkBalance
+// calls a helper function: checkBalanceHelper
 int checkBalance(char* str, int n) {
 	printf(
 		!checkBalanceHelper(str, n, 0)
@@ -193,11 +242,16 @@ int checkBalance(char* str, int n) {
 
 	return 0;
 }
+// helper function for checkBalance
+//
+// returns: {integer} returns 0 when balanced and a non-zero integer otherwise
 int checkBalanceHelper(char str[], int length, int idx) {
 	if (idx >= length) return 0;
 	// if its a, increase by 1, if its b, decrease by 1. If the armies are balanced--we should end up with 0
 	return (str[idx] == 'a' ? 1 : -1) + checkBalanceHelper(str, length, idx + 1);
 }
+// my implementation of escapingTime
+// finds the optimal route by checking the length of all routes, comparing them and selecting the shortest one
 int escapingTime(int n) {
 	if (n == 1) return 0;
 	int canDiv2 = !(n % 2);
@@ -215,6 +269,9 @@ int escapingTime(int n) {
 
 	return leastSteps;
 }
+// my implementation of heistOpt
+// each item can either be included or not included. giving us a definite set of possibilities to work with.
+// this implementation of heistOpt checks for all possible ways of summing up the items and returns the heighest values that it found
 int heistOpt(int maxW, int optVal, int w[], int v[], int start, int len) {
 	int withCurrent, withoutCurrent;
 	if (start >= len) return optVal;
